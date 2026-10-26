@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI 기반 정밀 손금 분석 - 왼손과 오른손 손금의 조화로운 해석">
+  <title>손금 분석 - AI 손금 풀이 서비스</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 상단 헤더 -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path>
+            <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path>
+            <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path>
+            <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">손금 분석</h1>
+          <p class="brand-subtitle">인공지능이 해석하는 양손 손금의 조화와 인생 흐름</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-privacy" class="btn-text" type="button" aria-haspopup="dialog">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          개인정보 안내
+        </button>
+        <button id="btn-reset" class="btn-outline-danger" type="button" title="모든 사진과 분석 결과를 초기화합니다">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          초기화
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 메인 컨테이너 -->
+  <main class="main-container">
+    <!-- 안내 배너 -->
+    <div class="guide-banner" role="region" aria-label="이용 안내">
+      <div class="guide-icon" aria-hidden="true">💡</div>
+      <div class="guide-content">
+        <strong>더 정확한 손금 확인을 위한 팁</strong>
+        <p>손바닥 전체가 평평하게 펴진 상태에서 손금이 뚜렷하게 보이도록 밝은 조명 아래서 촬영해 주세요. 왼손(선천적 성향)과 오른손(후천적 개척운)을 함께 분석합니다.</p>
+      </div>
+    </div>
+
+    <!-- 사진 업로드 섹션 -->
+    <section class="upload-section" aria-labelledby="upload-heading">
+      <h2 id="upload-heading" class="sr-only">손 사진 업로드</h2>
+      <div class="cards-grid">
+        <!-- 왼손 업로드 카드 -->
+        <article class="upload-card" id="card-left">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="hand-badge">선천운</span>
+              <h3 class="card-title">왼손 (Left Hand)</h3>
+            </div>
+            <span class="file-status" id="status-left">사진 미등록</span>
+          </div>
+
+          <label class="drop-zone" id="drop-left" for="input-left" tabindex="0" role="button" aria-label="왼손 사진 업로드 영역">
+            <!-- 빈 상태 뷰 -->
+            <div class="drop-prompt" id="prompt-left">
+              <div class="upload-icon-circle">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+              </div>
+              <p class="drop-text-main">왼손 사진을 끌어다 놓거나 선택하세요</p>
+              <p class="drop-text-sub">JPEG, PNG, WebP 지원 (최대 10MB)</p>
+              <span class="btn-select-file" id="btn-select-left">
+                파일 선택
+              </span>
+            </div>
+
+            <!-- 미리보기 뷰 -->
+            <div class="preview-wrapper hidden" id="preview-wrap-left">
+              <img id="img-preview-left" class="preview-img" alt="왼손 손바닥 미리보기">
+              <div class="preview-overlay">
+                <button type="button" class="btn-overlay-action btn-replace" id="btn-replace-left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                  </svg>
+                  교체
+                </button>
+                <button type="button" class="btn-overlay-action btn-delete" id="btn-delete-left">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                  삭제
+                </button>
+              </div>
+            </div>
+          </label>
+          <input type="file" id="input-left" class="sr-only" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
+        </article>
+
+        <!-- 오른손 업로드 카드 -->
+        <article class="upload-card" id="card-right">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="hand-badge right">후천운</span>
+              <h3 class="card-title">오른손 (Right Hand)</h3>
+            </div>
+            <span class="file-status" id="status-right">사진 미등록</span>
+          </div>
+
+          <label class="drop-zone" id="drop-right" for="input-right" tabindex="0" role="button" aria-label="오른손 사진 업로드 영역">
+            <!-- 빈 상태 뷰 -->
+            <div class="drop-prompt" id="prompt-right">
+              <div class="upload-icon-circle">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+              </div>
+              <p class="drop-text-main">오른손 사진을 끌어다 놓거나 선택하세요</p>
+              <p class="drop-text-sub">JPEG, PNG, WebP 지원 (최대 10MB)</p>
+              <span class="btn-select-file" id="btn-select-right">
+                파일 선택
+              </span>
+            </div>
+
+            <!-- 미리보기 뷰 -->
+            <div class="preview-wrapper hidden" id="preview-wrap-right">
+              <img id="img-preview-right" class="preview-img" alt="오른손 손바닥 미리보기">
+              <div class="preview-overlay">
+                <button type="button" class="btn-overlay-action btn-replace" id="btn-replace-right">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                  </svg>
+                  교체
+                </button>
+                <button type="button" class="btn-overlay-action btn-delete" id="btn-delete-right">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                  삭제
+                </button>
+              </div>
+            </div>
+          </label>
+          <input type="file" id="input-right" class="sr-only" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
+        </article>
+      </div>
+
+      <!-- 액션 영역 -->
+      <div class="action-bar">
+        <button id="btn-analyze" class="btn-primary-action" type="button" disabled>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span id="btn-analyze-text">손금 분석 시작</span>
+        </button>
+        <p class="action-caption" id="action-caption">왼손과 오른손 중 최소 1장의 사진을 등록해 주세요.</p>
+      </div>
+    </section>
+
+    <!-- 분석 결과 섹션 -->
+    <section class="result-section" id="result-section" aria-labelledby="result-heading">
+      <div class="section-title-wrap">
+        <h2 id="result-heading" class="section-title">손금 분석 결과</h2>
+        <span class="status-indicator-badge" id="ai-status-badge">
+          <span class="badge-dot"></span>
+          <span id="ai-status-text">데모 모드 (UI 테스트 단계)</span>
+        </span>
+      </div>
+
+      <!-- 10개 태그 선택 영역 -->
+      <nav class="tags-nav" aria-label="분석 카테고리 태그">
+        <div class="tags-scroll-container" id="tags-container" role="tablist">
+          <button class="tag-chip active" role="tab" aria-selected="true" data-tag="overall">
+            <span class="tag-symbol">🔮</span>
+            <span class="tag-label">종합 분석</span>
+          </button>
+          <button class="tag-chip" role="tab" aria-selected="false" data-tag="love">
+            <span class="tag-symbol">💖</span>
+            <span class="tag-label">연애</span>
+          </button>
+          <button class="tag-chip" role="tab" aria-selected="false" data-tag="fortune">
+            <span class="tag-symbol">✨</span>
+            <span class="tag-label">운세</span>
+          </button>
+          <button class="tag-chip" role="tab" aria-selected="false" data-tag="career">
+            <span class="tag-symbol">💼</span>
+            <span class="tag-label">직업</span>
+          </button>
+          <button class="tag-chip" role="tab" aria-selected="false" data-tag="wealth">
+            <span class="tag-symbol">💰</span>
+            <span class="tag-label">재물</span>
+          </button>
+          <button class="tag-chip" role="tab" aria-selected="false" data-tag="personality">
+            <span class="tag-symbol">🧠</span>
+            <span class="tag-label">성격</span>
+          </button>
+          <button class="tag-chip" role="tab" aria-selected="false" data-tag="health">
+            <span class="tag-symbol">🌿</span>
+            <span class="tag-label">건강</span>
+          </button>
+          <button class="tag-chip" role="tab" aria-selected="false" data-tag="crime">
+            <span class="tag-symbol">🛡️</span>
+            <span class="tag-label">범죄</span>
+          </button>
+          <button class="tag-chip" role="tab" aria-selected="false" data-tag="relations">
+            <span class="tag-symbol">🤝</span>
+            <span class="tag-label">인간관계</span>
+          </button>
+          <button class="tag-chip" role="tab" aria-selected="false" data-tag="marriage">
+            <span class="tag-symbol">💍</span>
+            <span class="tag-label">결혼</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- 결과 카드 상세 -->
+      <article class="result-card" id="result-card">
+        <header class="result-card-header">
+          <div class="result-category-info">
+            <span class="result-category-icon" id="res-icon">🔮</span>
+            <div>
+              <h3 class="result-category-title" id="res-title">종합 분석</h3>
+              <p class="result-category-sub" id="res-sub">생명선, 두뇌선, 감정선, 운명선의 총체적 조화</p>
+            </div>
+          </div>
+          <span class="result-hand-scope" id="res-hand-scope">양손 종합</span>
+        </header>
+
+        <!-- 결과 요약 하이라이트 박스 -->
+        <div class="result-summary-box">
+          <div class="summary-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            핵심 요약
+          </div>
+          <p class="summary-content" id="res-summary">
+            사진을 업로드하고 [손금 분석 시작] 버튼을 누르면 인공지능이 양손의 주선(생명선, 두뇌선, 감정선)과 보조선의 특징을 추출하여 전통 손금학 기반의 정밀 풀이를 제공합니다.
+          </p>
+        </div>
+
+        <!-- 상세 본문 영역 -->
+        <div class="result-body">
+          <h4 class="result-body-title">손금 특징 및 심층 해석</h4>
+          <div class="result-details" id="res-details">
+            <div class="empty-state-notice">
+              <p>현재는 <strong>2단계 UI 프로토타입 상태</strong>입니다.</p>
+              <p class="sub-notice">손 사진을 선택하면 미리보기를 확인하고 각 카테고리 탭을 전환해 볼 수 있습니다. 실제 AI 이미지 모델 분석 기능은 4~5단계에서 연동됩니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 오락용 고지 및 윤리 안내 문구 -->
+        <footer class="disclaimer-footer">
+          <div class="disclaimer-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            이용 안내 및 법적 고지
+          </div>
+          <p class="disclaimer-text">
+            본 손금 분석 서비스는 재미와 참고를 위한 <strong>오락용 콘텐츠</strong>입니다. 전통 손금학적 통념을 기반으로 하며, 질병 진단이나 치료 등 의학적 소견을 대신할 수 없습니다. 또한 특정 개인의 범죄 성향이나 위험성을 단정하거나 판정하지 않습니다.
+          </p>
+        </footer>
+      </article>
+    </section>
+  </main>
+
+  <!-- 개인정보 모달 다이얼로그 -->
+  <div class="modal-backdrop hidden" id="modal-privacy" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="privacy-modal-title" class="modal-title">개인정보 보호 안내</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-privacy" aria-label="닫기">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="privacy-list">
+          <li><strong>외부 AI 일시 전송:</strong> 손금 분석을 시작하면 업로드하신 손 사진이 AI 비전 모델(Cloudflare Workers AI)로 안전한 암호화(HTTPS) 통신을 통해 일시 전송되어 분석 텍스트를 생성합니다.</li>
+          <li><strong>브라우저 로컬 저장:</strong> 업로드한 원본/전처리 사진과 카테고리별 분석 결과는 <strong>사용자의 브라우저 내부(IndexedDB)</strong>에만 안전하게 보관되며, 서비스 제공자의 영구 서버에 저장되지 않습니다.</li>
+          <li><strong>기기 간 동기화 불가 및 데이터 삭제 주의:</strong> 브라우저 캐시를 삭제하거나 시크릿 모드 또는 다른 기기에서 접속할 경우 저장된 사진 및 결과가 동기화되지 않거나 사라질 수 있습니다.</li>
+          <li><strong>의학적·법적 판단 배제:</strong> 본 프로그램의 분석 내용은 전통 관습에 기반한 순수 오락용 콘텐츠입니다. 질병 진단 등 의학적 소견을 대신할 수 없으며, 어떠한 법적 책임이나 범죄 성향 판정도 제공하지 않습니다.</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-primary" id="btn-confirm-privacy">확인했습니다</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 메인 스크립트 로드 (file:/// 직접 열기 및 모듈 번들 호환) -->
+  <script src="bundle.js"></script>
+</body>
+</html>
